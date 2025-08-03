@@ -3,7 +3,9 @@
  * Students will implement the properties and methods to process the data
  */
 public class ExchangeRateWrapper {
-    
+
+
+
     // TODO: Implement properties to match the JSON structure of the API response
     // Sample response:
     // {
@@ -16,44 +18,43 @@ public class ExchangeRateWrapper {
     //     ...
     //   }
     // }
-    
-    // Add properties for base currency
-    // public String base_code;
-    
-    // Add property for time last updated
-    // public String time_last_update_unix;
-    
-    // Add property for rates (using a map)
-    // public Map<String, Decimal> conversion_rates;
 
-    // Add property for external ID
-    // This is an ID you will generate to uniquely identify the exchange rate record
-    // This does not come from the API response
-    // public String externalId; baseCurrency + '_' + targetCurrency
-    
+    public String base_code;
+
+    public String time_last_update_unix;    // seems like Integer would be a better type match
+
+    public Map<String, Decimal> conversion_rates;
+
+    public String externalId; // baseCurrency + '_' + targetCurrency
+
+
     /**
      * @description Converts the wrapper data to a list of Exchange_Rate__c records
      * @return List<Exchange_Rate__c> The list of exchange rate records
      */
     public List<Exchange_Rate__c> toExchangeRates() {
-        // TODO: Implement the method to convert the wrapper data to Exchange_Rate__c records
-        // 1. Create a list to hold the Exchange_Rate__c records
-        // 2. Iterate through the rates map
-        // 3. For each rate, create an Exchange_Rate__c record
-        // 4. Return the list of records
-        
-        return null; // Replace with actual implementation
+        List<Exchange_Rate__c> exchangeRates = new List<Exchange_Rate__c>();
+
+        for(String targetCurrency : conversion_rates.keySet()){
+            Exchange_Rate__c exchangeRate = new Exchange_Rate__c();
+            exchangeRate.Base_Currency__c = base_code;
+            exchangeRate.Target_Currency__c = targetCurrency;
+            exchangeRate.Rate__c = conversion_rates.get(targetCurrency);
+            exchangeRate.Last_Updated__c = System.now();
+            exchangeRate.External_Id__c = exchangeRate.Base_Currency__c + '_' + exchangeRate.Target_Currency__c;
+            exchangeRates.add(exchangeRate);
+        }
+
+        return exchangeRates;
     }
-    
+
     /**
      * @description Static method to parse the JSON response into the wrapper class
      * @param jsonResponse The JSON response from the API
      * @return ExchangeRateWrapper The parsed wrapper instance
      */
     public static ExchangeRateWrapper parse(String jsonResponse) {
-        // TODO: Implement the method to parse the JSON response
-        // Use JSON.deserialize or JSON.deserializeStrict to parse the response
-        
-        return null; // Replace with actual implementation
+        ExchangeRateWrapper wrapper = (ExchangeRateWrapper) JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
+        return wrapper;
     }
 }
