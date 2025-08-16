@@ -36,10 +36,10 @@ public class ExchangeRateService {
             }
 
         } catch (CalloutException e) {
-            System.debug('Callout failed: ' + e.getMessage());
+            System.debug(LoggingLevel.ERROR, 'Callout failed: ' + e.getMessage());
             throw e;
         } catch (Exception e) {
-            System.debug('Unexpected error: ' + e.getMessage());
+            System.debug(LoggingLevel.ERROR, 'Unexpected error: ' + e.getMessage());
             throw new CalloutException('Failed to make callout: ' + e.getMessage());
         }
     }
