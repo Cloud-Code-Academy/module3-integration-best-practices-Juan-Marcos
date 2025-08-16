@@ -20,9 +20,7 @@ public class ExchangeRateService {
     private static String makeCallout(String endpoint, String method) {
         try {
             HttpRequest request = new HttpRequest();
-
-            String apiKey = System.Label.Exchange_Rate_API_Key;
-            request.setEndpoint('callout:' + NAMED_CREDENTIAL + '/' + apiKey + endpoint);
+            request.setEndpoint('callout:' + NAMED_CREDENTIAL + endpoint);
             request.setMethod(method);
 
             Http http = new Http();
